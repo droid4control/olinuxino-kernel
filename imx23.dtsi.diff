@@ -1,0 +1,76 @@
+diff -ur linux-3.18.13.orig/arch/arm/boot/dts/imx23.dtsi linux-3.18.13/arch/arm/boot/dts/imx23.dtsi
+--- linux-3.18.13.orig/arch/arm/boot/dts/imx23.dtsi	2015-05-05 19:39:05.000000000 +0300
++++ linux-3.18.13/arch/arm/boot/dts/imx23.dtsi	2015-05-18 22:57:21.632882968 +0300
+@@ -308,6 +308,37 @@
+ 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
+ 					fsl,pull-up = <MXS_PULL_ENABLE>;
+ 				};
++
++				i2c0_pins_a: i2c0@0 {
++					reg = <0>;
++					fsl,pinmux-ids = <
++						0x01e0 /* MX23_PAD_I2C_SCL__I2C_SCL */
++						0x01f0 /* MX23_PAD_I2C_SDA__I2C_SDA */
++					>;
++					fsl,drive-strength = <1>;
++					fsl,voltage = <1>;
++					fsl,pull-up = <1>;
++				};
++				i2c1_pins_a: i2c1@0 {
++					reg = <0>;
++					fsl,pinmux-ids = <
++						0x1171 /* MX23_PAD_LCD_ENABLE__I2C_SCL */
++						0x1181 /* MX23_PAD_LCD_HSYNC__I2C_SDA  */
++					>;
++					fsl,drive-strength = <1>;
++					fsl,voltage = <1>;
++					fsl,pull-up = <1>;
++				};
++				i2c2_pins_a: i2c2@0 {
++					reg = <0>;
++					fsl,pinmux-ids = <
++						0x2031 /* MX23_PAD_SSP1_DATA1__I2C_SCL  */
++						0x2041 /* MX23_PAD_SSP1_DATA2__I2C_SDA  */
++					>;
++					fsl,drive-strength = <1>;
++					fsl,voltage = <1>;
++					fsl,pull-up = <1>;
++				};
+ 			};
+ 
+ 			digctl@8001c000 {
+@@ -444,8 +475,13 @@
+ 				status = "disabled";
+ 			};
+ 
+-			i2c@80058000 {
++			i2c0: i2c@80058000 {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				compatible = "fsl,imx23-i2c";
+ 				reg = <0x80058000 0x2000>;
++				interrupts = <27 26>;
++				clock-frequency = <100000>;
+ 				dmas = <&dma_apbx 3>;
+ 				dma-names = "rx-tx";
+ 				status = "disabled";
+diff -ur linux-3.18.13.orig/arch/arm/boot/dts/imx23-olinuxino.dts linux-3.18.13/arch/arm/boot/dts/imx23-olinuxino.dts
+--- linux-3.18.13.orig/arch/arm/boot/dts/imx23-olinuxino.dts	2015-05-05 19:39:05.000000000 +0300
++++ linux-3.18.13/arch/arm/boot/dts/imx23-olinuxino.dts	2015-05-19 20:50:26.553100980 +0300
+@@ -73,6 +73,16 @@
+ 				status = "okay";
+ 			};
+ 
++			i2c0: i2c@80058000 {
++				pinctrl-names = "default";
++				pinctrl-0 = <&i2c1_pins_a>;
++				status = "okay";
++
++				pcf8563: pcf8563@51 {
++					compatible = "nxp,pcf8563";
++					reg = <0x51>;
++				};
++			};
+ 			duart: serial@80070000 {
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&duart_pins_a>;
