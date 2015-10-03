@@ -2,7 +2,7 @@
 
 mkdir -p /root
 cd /root
-test -f linux-${VERSION}.tar.xz || wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-${VERSION}.tar.xz
+test -f linux-${VERSION}.tar.xz || wget https://www.kernel.org/pub/linux/kernel/v${VERSION%%.*}.x/linux-${VERSION}.tar.xz
 
 cd /usr/src
 test -d linux-${VERSION} || tar xJvfp /root/linux-${VERSION}.tar.xz
